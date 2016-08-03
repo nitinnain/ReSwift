@@ -75,10 +75,17 @@ public class Store<State: StateType>: StoreType {
     }
 
     private func _isNewSubscriber(subscriber: AnyStoreSubscriber) -> Bool {
+        #if swift(>=3)
+        if subscriptions.contains(where: { $0.subscriber === subscriber }) {
+            print("Store subscriber is already added, ignoring.")
+            return false
+        }
+        #else
         if subscriptions.contains({ $0.subscriber === subscriber }) {
             print("Store subscriber is already added, ignoring.")
             return false
         }
+        #endif
 
         return true
     }
